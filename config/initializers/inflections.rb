@@ -13,6 +13,7 @@
 ActiveSupport::Inflector.inflections(:'pt-BR') do |inflect|
   inflect.plural /(ão)$/i, 'ões'
   inflect.plural 'comentário', 'comentários'
+  inflect.plural 'resultado encontrado', 'resultados encontrados'
 end
 
 # These inflection rules are supported but not enabled by default:

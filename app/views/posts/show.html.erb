@@ -1,19 +1,67 @@
-<p id="notice"><%= notice %></p>
+<div class="shadow p-5 bg-light rounded">
+  <div class="text-center mb-5">
+    <h1><%= @post.title %></h1>
 
-<p>
-  <strong>Title:</strong>
-  <%= @post.title %>
-</p>
+    <p class="text-muted">
+      <strong class="text-capitalize"><%= @post.author %></strong><br>
+      <small><%= l @post.created_at, format: :long %></small>
+    </p>
+  </div>
 
-<p>
-  <strong>Author:</strong>
-  <%= @post.author %>
-</p>
+  <div class="px-5">
+    <%= sanitize(@post.body.gsub("\n", "<br>")).html_safe %>
+  </div>
+</div>
 
-<p>
-  <strong>Body:</strong>
-  <%= @post.body %>
-</p>
+<div class="m-5">
+  <div class="text-center">
+    <h4>
+      <%= pluralize(@post.comments.count, 'comentário') %>
+      <% if @post.comments.none? %>
+        <span class="badge bg-success">Seja o primeiro a comentar!</span>
+      <% end %>
+    </h4>
+  </div>
 
-<%= link_to 'Edit', edit_post_path(@post) %> |
-<%= link_to 'Back', posts_path %>
+  <div class="shadow-sm m-3 p-3 bg-light rounded">
+    <%= form_with(model: @comment, local: true) do |form| %>
+      <%= form.hidden_field :post_id, value: @post.id %>
+      <div class="form-group">
+        <%= form.label :author %>
+        <%= form.text_field :author, class: 'form-control', required: true %>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :body %>
+        <%= form.text_area :body, class: 'form-control', required: true %>
+      </div>
+
+      <div class="d-flex justify-content-between mt-1">
+        <%= form.submit 'Enviar', class: 'btn btn-primary', data: { disabled_with: 'Enviando...' } %>
+        <button type="reset" class="btn btn-secondary">Cancelar</button>
+      </div>
+    <% end %>
+  </div>
+
+  <% @comments.each do |comment| %>
+    <div class="shadow-sm m-3 p-3 bg-light rounded">
+      <div class="row">
+        <div class="col">
+          <strong><%= comment.author %></strong>
+        </div>
+
+        <div class="col text-end">
+          <em data-bs-toggle="tooltip" data-bs-placement="top" title="<%= l comment.created_at, format: :long %>">
+            <%= time_ago_in_words comment.created_at %> atrás
+          </em>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col text-start">
+          <%= sanitize(comment.body.gsub("\n", "<br>")).html_safe %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
