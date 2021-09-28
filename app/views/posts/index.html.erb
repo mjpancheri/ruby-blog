@@ -1,0 +1,17 @@
+<% if @posts.empty? %>
+  <div class="alert alert-info" role="alert">
+    Nenhum post encontrado.
+  </div>
+<% end %>
+
+<%# <% @posts.each do |post|
+  <%# <%= render post %>
+<%# <% end %>
+
+<%= render @posts %>
+
+<hr>
+
+<div class="text-end">
+  <%= link_to "Novo post", new_post_path, class: "btn btn-success" %>
+</div>
